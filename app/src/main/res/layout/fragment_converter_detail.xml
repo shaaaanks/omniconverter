@@ -95,7 +95,8 @@
         android:layout_height="wrap_content"
         android:text="Start Conversion"
         android:textSize="16sp"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginBottom="16dp"
+        android:fontFamily="serif" />
 
     <Button
         android:id="@+id/download_button"
@@ -103,6 +104,7 @@
         android:layout_height="wrap_content"
         android:text="Save Converted File"
         android:textSize="16sp"
+        android:fontFamily="serif"
         android:visibility="gone" />
 
 </LinearLayout>

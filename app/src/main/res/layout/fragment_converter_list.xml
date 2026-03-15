@@ -4,136 +4,74 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
     android:background="@drawable/bg_dashboard_gradient">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="OmniConverter"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:textColor="@color/oc_secondary_dark"
-        android:padding="8dp"
-        android:background="@drawable/bg_chip_surface"
-        android:layout_marginBottom="8dp" />
-
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Convert anything, anywhere"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:textColor="@color/oc_primary_dark" />
+        android:orientation="vertical"
+        android:padding="16dp">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Choose a tool category below and start converting in seconds."
-        android:textSize="14sp"
-        android:textColor="@color/oc_text_secondary"
-        android:layout_marginTop="6dp"
-        android:layout_marginBottom="12dp" />
-
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:overScrollMode="never"
-        android:scrollbars="none">
-
-        <com.google.android.material.chip.ChipGroup
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingEnd="8dp">
+            android:text="OmniConverter"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/oc_secondary_dark"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="6dp"
+            android:background="@drawable/bg_chip_surface"
+            android:layout_marginBottom="12dp"
+            android:fontFamily="serif" />
 
-            <com.google.android.material.chip.Chip
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-                android:text="Images"
-                android:textColor="@color/oc_secondary_dark"
-                app:chipBackgroundColor="@color/oc_chip_bg"
-                app:chipStrokeColor="@color/oc_soft_green"
-                app:chipStrokeWidth="1dp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Convert anything, anywhere"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:textColor="@color/oc_primary_dark"
+            android:layout_marginBottom="4dp"
+            android:fontFamily="serif" />
 
-            <com.google.android.material.chip.Chip
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-                android:text="Video"
-                android:textColor="@color/oc_secondary_dark"
-                app:chipBackgroundColor="@color/oc_chip_bg"
-                app:chipStrokeColor="@color/oc_soft_green"
-                app:chipStrokeWidth="1dp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Choose a tool category below and start converting in seconds."
+            android:textSize="14sp"
+            android:textColor="@color/oc_text_secondary"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="serif" />
 
-            <com.google.android.material.chip.Chip
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-                android:text="Audio"
-                android:textColor="@color/oc_secondary_dark"
-                app:chipBackgroundColor="@color/oc_chip_bg"
-                app:chipStrokeColor="@color/oc_soft_green"
-                app:chipStrokeWidth="1dp" />
-
-            <com.google.android.material.chip.Chip
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-                android:text="Documents"
-                android:textColor="@color/oc_secondary_dark"
-                app:chipBackgroundColor="@color/oc_chip_bg"
-                app:chipStrokeColor="@color/oc_soft_green"
-                app:chipStrokeWidth="1dp" />
-
-            <com.google.android.material.chip.Chip
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-                android:text="PDF"
-                android:textColor="@color/oc_secondary_dark"
-                app:chipBackgroundColor="@color/oc_chip_bg"
-                app:chipStrokeColor="@color/oc_soft_green"
-                app:chipStrokeWidth="1dp" />
-
-            <com.google.android.material.chip.Chip
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-                android:text="Archives"
-                android:textColor="@color/oc_secondary_dark"
-                app:chipBackgroundColor="@color/oc_chip_bg"
-                app:chipStrokeColor="@color/oc_soft_green"
-                app:chipStrokeWidth="1dp" />
-        </com.google.android.material.chip.ChipGroup>
-    </HorizontalScrollView>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Tip: stay on this screen to monitor progress while a conversion runs."
-        android:textSize="12sp"
-        android:textColor="@color/oc_text_secondary"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="12dp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tip: stay on this screen to monitor progress while a conversion runs."
+            android:textSize="12sp"
+            android:textColor="@color/oc_text_secondary"
+            android:fontFamily="serif" />
+    </LinearLayout>
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:layout_margin="12dp"
+        android:layout_marginTop="8dp"
         app:cardBackgroundColor="@android:color/white"
         app:cardCornerRadius="20dp"
-        app:cardElevation="6dp"
-        app:cardUseCompatPadding="true"
+        app:cardElevation="8dp"
         app:strokeColor="@color/oc_soft_green"
-        app:strokeWidth="1dp">
+        app:strokeWidth="2dp">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/converter_list_recycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:padding="8dp" />
+            android:padding="12dp"
+            android:scrollbars="vertical" />
 
     </com.google.android.material.card.MaterialCardView>
 

@@ -98,6 +98,8 @@
             android:layout_height="wrap_content"
             android:text="@string/initializing"
             android:textSize="12sp"
+            android:textColor="#8EB69B"
+            android:fontFamily="serif" />
             android:textColor="#235347"
             android:alpha="0.7"
             android:fontFamily="@font/poppins_regular" />

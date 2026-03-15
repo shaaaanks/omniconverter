@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
+    android:layout_margin="6dp"
     app:cardCornerRadius="16dp"
     app:cardElevation="4dp"
     app:strokeColor="@color/oc_soft_green"
@@ -13,54 +13,49 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:gravity="center"
         android:padding="12dp">
 
         <FrameLayout
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:background="@drawable/bg_converter_icon">
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/bg_converter_icon"
+            android:layout_marginBottom="8dp">
 
             <ImageView
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_launcher_foreground"
                 app:tint="@color/white" />
         </FrameLayout>
 
-        <LinearLayout
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/converter_title"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_marginStart="12dp">
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="@color/oc_text_primary"
+            android:gravity="center"
+            android:layout_marginBottom="4dp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:fontFamily="serif"
+            android:letterSpacing="0.01" />
 
-            <TextView
-                android:id="@+id/converter_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="@color/oc_text_primary"
-                android:layout_marginBottom="4dp" />
-
-            <TextView
-                android:id="@+id/converter_desc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="13sp"
-                android:textColor="@color/oc_text_secondary" />
-        </LinearLayout>
-
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@android:drawable/ic_media_next"
-            app:tint="@color/oc_soft_green"
-            android:layout_gravity="center_vertical"
-            android:contentDescription="@string/app_name" />
+        <TextView
+            android:id="@+id/converter_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="11sp"
+            android:textColor="@color/oc_text_secondary"
+            android:gravity="center"
+            android:maxLines="3"
+            android:ellipsize="end"
+            android:fontFamily="serif"
+            android:letterSpacing="0.005" />
 
     </LinearLayout>
 

@@ -11,4 +11,6 @@
     <string name="initializing">INITIALIZING</string>
     <string name="app_logo">OmniConverter Logo</string>
     <string name="conversion_icon">Conversion Icon</string>
+    <string name="btn_download">Download</string>
+    <string name="btn_share">Share</string>
 </resources>
