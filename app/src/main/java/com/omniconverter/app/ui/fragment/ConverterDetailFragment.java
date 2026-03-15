@@ -11,7 +11,10 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import android.text.InputType;
+import android.text.TextUtils;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -204,6 +207,9 @@ public class ConverterDetailFragment extends Fragment {
         } else if ("OCR".equalsIgnoreCase(converterType)) {
             formats = new String[]{"TXT"};
             selectedFormat = "TXT";
+        } else if ("VIDEO_TO_FRAMES".equalsIgnoreCase(converterType)) {
+            formats = new String[]{"PNG", "JPG", "WEBP"};
+            selectedFormat = "JPG";
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
@@ -271,6 +277,53 @@ public class ConverterDetailFragment extends Fragment {
             return;
         }
 
+        // For video-to-frames, collect fps & quality before starting
+        if ("VIDEO_TO_FRAMES".equalsIgnoreCase(converterType)) {
+            showVideoFramesParamDialog();
+            return;
+        }
+
+        enqueueWork(null, null);
+    }
+
+    private void showVideoFramesParamDialog() {
+        final EditText fpsInput = new EditText(getContext());
+        fpsInput.setHint("Frames per second (default 1)");
+        fpsInput.setInputType(InputType.TYPE_CLASS_NUMBER);
+
+        final EditText qualityInput = new EditText(getContext());
+        qualityInput.setHint("Quality 1-100 (default 90)");
+        qualityInput.setInputType(InputType.TYPE_CLASS_NUMBER);
+
+        LinearLayout layout = new LinearLayout(getContext());
+        layout.setOrientation(LinearLayout.VERTICAL);
+        int pad = (int) (getResources().getDisplayMetrics().density * 16);
+        layout.setPadding(pad, pad, pad, pad);
+        layout.addView(fpsInput);
+        layout.addView(qualityInput);
+
+        new androidx.appcompat.app.AlertDialog.Builder(requireContext())
+            .setTitle("Video to Frames Options")
+            .setMessage("Tip: stay on this screen to view progress. Switching tabs won’t stop the work but you won’t see updates.")
+            .setView(layout)
+            .setPositiveButton("Start", (d, which) -> {
+                Integer fps = null;
+                Integer quality = null;
+                try {
+                    String fpsStr = fpsInput.getText().toString().trim();
+                    if (!TextUtils.isEmpty(fpsStr)) fps = Integer.parseInt(fpsStr);
+                } catch (Exception ignored) {}
+                try {
+                    String qStr = qualityInput.getText().toString().trim();
+                    if (!TextUtils.isEmpty(qStr)) quality = Integer.parseInt(qStr);
+                } catch (Exception ignored) {}
+                enqueueWork(fps, quality);
+            })
+            .setNegativeButton("Cancel", null)
+            .show();
+    }
+
+    private void enqueueWork(Integer fps, Integer quality) {
         try {
             Data.Builder dataBuilder = new Data.Builder()
                 .putString(ConversionWorker.KEY_TYPE, converterType)
@@ -280,19 +333,17 @@ public class ConverterDetailFragment extends Fragment {
                 if (selectedUris != null && !selectedUris.isEmpty()) {
                     String[] allUris = selectedUris.stream().map(Uri::toString).toArray(String[]::new);
                     dataBuilder.putStringArray("file_uris", allUris);
-                    // Also set KEY_URI to the first one just in case something expects it, but worker should prioritize file_uris for merge
                     dataBuilder.putString(ConversionWorker.KEY_URI, selectedUris.get(0).toString());
                 } else if (selectedUri != null) {
-                     // Fallback if selectedUris is empty but selectedUri is set (single file case, though merge implies multiple)
-                     dataBuilder.putStringArray("file_uris", new String[]{selectedUri.toString()});
-                     dataBuilder.putString(ConversionWorker.KEY_URI, selectedUri.toString());
+                    dataBuilder.putStringArray("file_uris", new String[]{selectedUri.toString()});
+                    dataBuilder.putString(ConversionWorker.KEY_URI, selectedUri.toString());
                 }
             } else {
                 dataBuilder.putString(ConversionWorker.KEY_URI, selectedUri.toString());
             }
 
-            // Remove old split logic
-            // if ("PDF_MERGE".equalsIgnoreCase(converterType) && selectedUris.size() > 1) { ... }
+            if (fps != null) dataBuilder.putInt("fps", fps);
+            if (quality != null) dataBuilder.putInt("quality", quality);
 
             Data inputData = dataBuilder.build();
 
@@ -300,24 +351,23 @@ public class ConverterDetailFragment extends Fragment {
                 .setInputData(inputData)
                 .build();
 
-            // Observe the work status
+            Toast.makeText(getContext(), "Conversion started. Stay on this tab to monitor progress.", Toast.LENGTH_SHORT).show();
+
             WorkManager.getInstance(getContext()).getWorkInfoByIdLiveData(conversionRequest.getId())
                 .observe(getViewLifecycleOwner(), new Observer<WorkInfo>() {
                     @Override
                     public void onChanged(WorkInfo workInfo) {
                         if (workInfo != null) {
                             if (workInfo.getState() == WorkInfo.State.RUNNING) {
-                                // Show progress
                                 progressBar.setVisibility(View.VISIBLE);
+                                progressBar.setIndeterminate(true);
                                 convertButton.setEnabled(false);
                                 downloadButton.setEnabled(false);
                             } else if (workInfo.getState() == WorkInfo.State.SUCCEEDED) {
-                                // Hide progress
                                 progressBar.setVisibility(View.GONE);
                                 convertButton.setEnabled(true);
                                 downloadButton.setEnabled(true);
 
-                                // Get output URI from the result
                                 outputUriString = workInfo.getOutputData().getString("outputUri");
                                 if (outputUriString != null) {
                                     downloadButton.setVisibility(View.VISIBLE);
@@ -326,7 +376,6 @@ public class ConverterDetailFragment extends Fragment {
                                     Toast.makeText(getContext(), "No output file found", Toast.LENGTH_SHORT).show();
                                 }
                             } else if (workInfo.getState() == WorkInfo.State.FAILED) {
-                                // Hide progress
                                 progressBar.setVisibility(View.GONE);
                                 convertButton.setEnabled(true);
                                 downloadButton.setEnabled(false);
@@ -337,9 +386,6 @@ public class ConverterDetailFragment extends Fragment {
                 });
 
             WorkManager.getInstance(getContext()).enqueue(conversionRequest);
-            Toast.makeText(getContext(), "Converting to " + selectedFormat, Toast.LENGTH_SHORT).show();
-
-            // Do not pop back, stay to show progress and download
         } catch (Exception e) {
             Toast.makeText(getContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }

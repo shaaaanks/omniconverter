@@ -83,10 +83,16 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void transitionToMainActivity() {
-        Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-        startActivity(intent);
-        finish();
-        // Apply smooth fade transition
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        try {
+            Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+            // Apply smooth fade transition
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        } catch (Exception e) {
+            android.util.Log.e("SplashActivity", "Error transitioning to MainActivity: ", e);
+            // Fallback: finish and show error
+            finish();
+        }
     }
 }

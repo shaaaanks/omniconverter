@@ -41,7 +41,8 @@ public class ConverterListAdapter extends RecyclerView.Adapter<ConverterListAdap
             new ConverterItem("PDF Merge", "Combine multiple PDFs", "PDF_MERGE"),
             new ConverterItem("PDF Split", "Split PDF files", "PDF_SPLIT"),
             new ConverterItem("OCR", "Extract text from images", "OCR"),
-            new ConverterItem("Word to PDF", "Convert DOCX to PDF", "DOCX_TO_PDF")
+            new ConverterItem("Word to PDF", "Convert DOCX to PDF", "DOCX_TO_PDF"),
+            new ConverterItem("Video to Frames", "Extract high-quality frames from video", "VIDEO_TO_FRAMES")
         );
     }
 

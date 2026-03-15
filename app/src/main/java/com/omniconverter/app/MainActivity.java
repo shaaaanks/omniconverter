@@ -24,52 +24,62 @@ public class MainActivity extends AppCompatActivity implements ConverterListFrag
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_main);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.fragment_container), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+        try {
+            EdgeToEdge.enable(this);
+            setContentView(R.layout.activity_main);
+            ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.fragment_container), (v, insets) -> {
+                Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+                v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+                return insets;
+            });
 
-        bottomNav = findViewById(R.id.bottom_navigation);
+            bottomNav = findViewById(R.id.bottom_navigation);
 
-        if (savedInstanceState == null) {
-            // Initialize fragments
-            converterListFragment = new ConverterListFragment();
-            converterListFragment.setListener(this);
-            historyFragment = new HistoryFragment();
+            if (savedInstanceState == null) {
+                // Initialize fragments
+                converterListFragment = new ConverterListFragment();
+                converterListFragment.setListener(this);
+                historyFragment = new HistoryFragment();
 
-            // Show converter list by default
-            getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, converterListFragment)
-                .commit();
-        } else {
-            converterListFragment = (ConverterListFragment) getSupportFragmentManager()
-                .findFragmentByTag("converter_list");
-            historyFragment = (HistoryFragment) getSupportFragmentManager()
-                .findFragmentByTag("history");
+                // Show converter list by default
+                getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, converterListFragment)
+                    .commitNow();
+            } else {
+                converterListFragment = (ConverterListFragment) getSupportFragmentManager()
+                    .findFragmentByTag("converter_list");
+                historyFragment = (HistoryFragment) getSupportFragmentManager()
+                    .findFragmentByTag("history");
+            }
+        } catch (Exception e) {
+            android.util.Log.e("MainActivity", "Error during onCreate: ", e);
+            finish();
+            return;
         }
 
         // Bottom navigation listener
         bottomNav.setOnItemSelectedListener(item -> {
-            if (item.getItemId() == R.id.nav_converters) {
-                if (converterListFragment == null) {
-                    converterListFragment = new ConverterListFragment();
-                    converterListFragment.setListener(this);
+            try {
+                if (item.getItemId() == R.id.nav_converters) {
+                    if (converterListFragment == null) {
+                        converterListFragment = new ConverterListFragment();
+                        converterListFragment.setListener(this);
+                    }
+                    getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, converterListFragment, "converter_list")
+                        .commit();
+                    return true;
+                } else if (item.getItemId() == R.id.nav_history) {
+                    if (historyFragment == null) {
+                        historyFragment = new HistoryFragment();
+                    }
+                    getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, historyFragment, "history")
+                        .commit();
+                    return true;
                 }
-                getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, converterListFragment, "converter_list")
-                    .commit();
-                return true;
-            } else if (item.getItemId() == R.id.nav_history) {
-                if (historyFragment == null) {
-                    historyFragment = new HistoryFragment();
-                }
-                getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, historyFragment, "history")
-                    .commit();
-                return true;
+            } catch (Exception e) {
+                android.util.Log.e("MainActivity", "Error during navigation: ", e);
             }
             return false;
         });

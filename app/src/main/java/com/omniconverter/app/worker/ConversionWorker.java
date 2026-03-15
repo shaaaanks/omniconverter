@@ -11,6 +11,7 @@ import androidx.work.WorkerParameters;
 import com.omniconverter.app.converters.Converter;
 import com.omniconverter.app.converters.ImageConverter;
 import com.omniconverter.app.converters.VideoToAudioConverter;
+import com.omniconverter.app.converters.VideoToFramesConverter;
 import com.omniconverter.app.core.ConversionResult;
 import com.omniconverter.app.service.ConversionNotificationHelper;
 import com.omniconverter.app.storage.ConversionEntity;
@@ -61,6 +62,13 @@ public class ConversionWorker extends Worker {
         }
         if (fileUris != null) {
             params.put("file_uris", fileUris); // Pass to converter
+        }
+        // Optional video-to-frames params
+        if (getInputData().getKeyValueMap().containsKey("fps")) {
+            params.put("fps", getInputData().getInt("fps", 1));
+        }
+        if (getInputData().getKeyValueMap().containsKey("quality")) {
+            params.put("quality", getInputData().getInt("quality", 90));
         }
 
         String fileName = getFileNameFromUri(uri);
@@ -113,6 +121,7 @@ public class ConversionWorker extends Worker {
         if ("PDF_MERGE".equalsIgnoreCase(type)) return new com.omniconverter.app.converters.PDFMergerConverter();
         if ("DOCX_TO_PDF".equalsIgnoreCase(type)) return new com.omniconverter.app.converters.WordToPDFConverter();
         if ("OCR".equalsIgnoreCase(type)) return new com.omniconverter.app.converters.OCRConverter();
+        if ("VIDEO_TO_FRAMES".equalsIgnoreCase(type)) return new VideoToFramesConverter();
         return null;
     }
 }

@@ -2,4 +2,13 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="oc_primary_dark">#051F20</color>
+    <color name="oc_secondary_dark">#0B2B26</color>
+    <color name="oc_accent_dark">#163832</color>
+    <color name="oc_primary_green">#235347</color>
+    <color name="oc_soft_green">#8EB69B</color>
+    <color name="oc_bg_light">#DAF1DE</color>
+    <color name="oc_chip_bg">#F3F8F4</color>
+    <color name="oc_text_primary">#102620</color>
+    <color name="oc_text_secondary">#4F5E58</color>
 </resources>

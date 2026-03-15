@@ -6,5 +6,6 @@ public enum ConversionType {
     PDF_MERGE,
     PDF_SPLIT,
     OCR,
-    DOCX_TO_PDF
+    DOCX_TO_PDF,
+    VIDEO_TO_FRAMES
 }

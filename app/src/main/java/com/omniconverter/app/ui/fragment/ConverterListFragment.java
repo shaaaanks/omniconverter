@@ -29,21 +29,41 @@ public class ConverterListFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_converter_list, container, false);
+        try {
+            return inflater.inflate(R.layout.fragment_converter_list, container, false);
+        } catch (Exception e) {
+            android.util.Log.e("ConverterListFragment", "Error inflating fragment_converter_list layout: ", e);
+            // Return a simple fallback view
+            android.widget.LinearLayout fallback = new android.widget.LinearLayout(getContext());
+            fallback.setOrientation(android.widget.LinearLayout.VERTICAL);
+            android.widget.TextView errorText = new android.widget.TextView(getContext());
+            errorText.setText("Error loading converter list: " + e.getMessage());
+            errorText.setTextColor(android.graphics.Color.RED);
+            fallback.addView(errorText);
+            return fallback;
+        }
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        recyclerView = view.findViewById(R.id.converter_list_recycler);
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-
-        ConverterListAdapter adapter = new ConverterListAdapter(item -> {
-            if (listener != null) {
-                listener.onConverterSelected(item);
+        try {
+            recyclerView = view.findViewById(R.id.converter_list_recycler);
+            if (recyclerView == null) {
+                android.util.Log.e("ConverterListFragment", "recyclerView is null - R.id.converter_list_recycler not found");
+                return;
             }
-        });
-        recyclerView.setAdapter(adapter);
+            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+
+            ConverterListAdapter adapter = new ConverterListAdapter(item -> {
+                if (listener != null) {
+                    listener.onConverterSelected(item);
+                }
+            });
+            recyclerView.setAdapter(adapter);
+        } catch (Exception e) {
+            android.util.Log.e("ConverterListFragment", "Error in onViewCreated: ", e);
+        }
     }
 
     public void setListener(OnConverterSelectedListener listener) {

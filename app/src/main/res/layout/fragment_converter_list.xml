@@ -1,21 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@drawable/bg_dashboard_gradient">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Select a Converter"
+        android:text="OmniConverter"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/oc_secondary_dark"
+        android:padding="8dp"
+        android:background="@drawable/bg_chip_surface"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Convert anything, anywhere"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:layout_marginBottom="16dp" />
+        android:textColor="@color/oc_primary_dark" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/converter_list_recycler"
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
+        android:text="Choose a tool category below and start converting in seconds."
+        android:textSize="14sp"
+        android:textColor="@color/oc_text_secondary"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="12dp" />
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:overScrollMode="never"
+        android:scrollbars="none">
+
+        <com.google.android.material.chip.ChipGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="8dp">
+
+            <com.google.android.material.chip.Chip
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:text="Images"
+                android:textColor="@color/oc_secondary_dark"
+                app:chipBackgroundColor="@color/oc_chip_bg"
+                app:chipStrokeColor="@color/oc_soft_green"
+                app:chipStrokeWidth="1dp" />
+
+            <com.google.android.material.chip.Chip
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:text="Video"
+                android:textColor="@color/oc_secondary_dark"
+                app:chipBackgroundColor="@color/oc_chip_bg"
+                app:chipStrokeColor="@color/oc_soft_green"
+                app:chipStrokeWidth="1dp" />
+
+            <com.google.android.material.chip.Chip
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:text="Audio"
+                android:textColor="@color/oc_secondary_dark"
+                app:chipBackgroundColor="@color/oc_chip_bg"
+                app:chipStrokeColor="@color/oc_soft_green"
+                app:chipStrokeWidth="1dp" />
+
+            <com.google.android.material.chip.Chip
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:text="Documents"
+                android:textColor="@color/oc_secondary_dark"
+                app:chipBackgroundColor="@color/oc_chip_bg"
+                app:chipStrokeColor="@color/oc_soft_green"
+                app:chipStrokeWidth="1dp" />
+
+            <com.google.android.material.chip.Chip
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:text="PDF"
+                android:textColor="@color/oc_secondary_dark"
+                app:chipBackgroundColor="@color/oc_chip_bg"
+                app:chipStrokeColor="@color/oc_soft_green"
+                app:chipStrokeWidth="1dp" />
+
+            <com.google.android.material.chip.Chip
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:text="Archives"
+                android:textColor="@color/oc_secondary_dark"
+                app:chipBackgroundColor="@color/oc_chip_bg"
+                app:chipStrokeColor="@color/oc_soft_green"
+                app:chipStrokeWidth="1dp" />
+        </com.google.android.material.chip.ChipGroup>
+    </HorizontalScrollView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tip: stay on this screen to monitor progress while a conversion runs."
+        android:textSize="12sp"
+        android:textColor="@color/oc_text_secondary"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="12dp" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:cardBackgroundColor="@android:color/white"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="6dp"
+        app:cardUseCompatPadding="true"
+        app:strokeColor="@color/oc_soft_green"
+        app:strokeWidth="1dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/converter_list_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:padding="8dp" />
+
+    </com.google.android.material.card.MaterialCardView>
 
 </LinearLayout>

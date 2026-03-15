@@ -4,9 +4,7 @@ plugins {
 
 android {
     namespace = "com.omniconverter.app"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.omniconverter.app"
@@ -63,6 +61,7 @@ dependencies {
 
     // ML Kit Text Recognition (OCR)
     implementation("com.google.android.gms:play-services-mlkit-text-recognition:19.0.0")
+
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

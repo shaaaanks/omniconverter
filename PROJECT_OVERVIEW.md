@@ -277,6 +277,30 @@ The OCR module uses **Google ML Kit Text Recognition** to extract text from imag
 - **Result**: Upon completion, the user can download the extracted text file.
 - **Offline Capability**: Since it uses ML Kit's on-device processing, OCR works even without an internet connection.
 
+## Video to Frames Workflow
+
+The Video to Frames module extracts high-quality individual frames from a video file and packages them into a portable ZIP archive.
+
+### 1. Technology Stack
+
+- **Library**: FFmpeg Kit Full (`com.arthenica:ffmpeg-kit-full`)
+- **Engine**: FFmpeg (Fast Forward MPEG) for high-performance video processing.
+- **Output Support**: PNG, JPG, and WEBP formats.
+
+### 2. Implementation Logic (`VideoToFramesConverter`)
+
+1.  **Command Preparation**: Constructs an FFmpeg command to extract frames at a rate of 1 frame per second (1 fps).
+2.  **Quality Control**: Uses high-quality encoding parameters (e.g., `-q:v 2` for JPEG) to ensure clarity.
+3.  **Pattern Generation**: Generates numbered filenames (e.g., `frame_001.jpg`, `frame_002.jpg`) using FFmpeg's sequential output pattern.
+4.  **Batch Processing**: FFmpeg parses the video stream and writes each identified frame to a temporary directory.
+5.  **Packaging**: All extracted frames are compressed into a single `.zip` file for easy management and download.
+
+### 3. User Experience
+
+- **Selection**: User chooses a video file (MP4, MKV, AVI, etc.).
+- **Format Choice**: User specifies the desired image format for the frames.
+- **Output**: The user receives a single ZIP file containing the entire series of extracted high-quality images.
+
 ## Splash Screen Design & Implementation
 
 The OmniConverter splash screen is a production-grade, Material Design-compliant interface that creates a professional first impression while adhering to modern app design standards.
