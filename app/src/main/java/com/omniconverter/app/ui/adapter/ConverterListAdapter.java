@@ -40,7 +40,6 @@ public class ConverterListAdapter extends RecyclerView.Adapter<ConverterListAdap
             new ConverterItem("MP4 to MP3", "Extract audio from MP4 videos", "MP4_TO_MP3"),
             new ConverterItem("PDF Merge", "Combine multiple PDFs", "PDF_MERGE"),
             new ConverterItem("PDF Split", "Split PDF files", "PDF_SPLIT"),
-            new ConverterItem("ZIP Extract", "Extract ZIP archives", "ZIP_EXTRACT"),
             new ConverterItem("OCR", "Extract text from images", "OCR"),
             new ConverterItem("Word to PDF", "Convert DOCX to PDF", "DOCX_TO_PDF")
         );

@@ -201,9 +201,9 @@ public class ConverterDetailFragment extends Fragment {
         } else if ("DOCX_TO_PDF".equalsIgnoreCase(converterType)) {
             formats = new String[]{"PDF"};
             selectedFormat = "PDF";
-        } else if ("ZIP_EXTRACT".equalsIgnoreCase(converterType)) {
-            formats = new String[]{"ZIP"};
-            selectedFormat = "ZIP";
+        } else if ("OCR".equalsIgnoreCase(converterType)) {
+            formats = new String[]{"TXT"};
+            selectedFormat = "TXT";
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(

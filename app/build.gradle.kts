@@ -10,10 +10,12 @@ android {
 
     defaultConfig {
         applicationId = "com.omniconverter.app"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
+
+        multiDexEnabled = true
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -38,6 +40,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+    implementation("androidx.multidex:multidex:2.0.1")
 
     // Fragment and RecyclerView
     implementation("androidx.fragment:fragment:1.5.7")
@@ -54,6 +57,12 @@ dependencies {
     // PDFBox android (placeholder) - correct group id with dash
     implementation("com.tom-roush:pdfbox-android:2.0.27.0")
 
+    // Apache POI for Word documents
+    implementation("org.apache.poi:poi:5.2.5")
+    implementation("org.apache.poi:poi-ooxml:5.2.5")
+
+    // ML Kit Text Recognition (OCR)
+    implementation("com.google.android.gms:play-services-mlkit-text-recognition:19.0.0")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

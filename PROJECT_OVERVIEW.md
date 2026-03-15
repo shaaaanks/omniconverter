@@ -252,6 +252,31 @@ The core logic handles the merging process robustly:
 - ✅ Shows clear file list with order numbers
 - ✅ Files saved to standard `Downloads/OmniConverter/` folder
 
+## OCR (Image to Text) Workflow
+
+The OCR module uses **Google ML Kit Text Recognition** to extract text from images locally on the device.
+
+### 1. Technology Stack
+
+- **Library**: Google ML Kit Text Recognition (`com.google.android.gms:play-services-mlkit-text-recognition`)
+- **Processing**: On-device machine learning models for high speed and privacy.
+- **Output**: UTF-8 encoded text files (.txt).
+
+### 2. Implementation Logic (`OCRConverter`)
+
+1.  **Image Loading**: The input image URI is converted to an `InputImage` object compatible with ML Kit.
+2.  **Detection**: The `TextRecognizer` processes the image to identify blocks, lines, and elements of text.
+3.  **Extraction**: The extracted text is consolidated into a single string while preserving basic structural layout.
+4.  **File Generation**: A new `.txt` file is created in the app's document storage directory.
+5.  **Persistence**: The extracted text is written to the file using UTF-8 encoding to support various characters.
+
+### 3. User Experience
+
+- **Selection**: User selects an image (JPG, PNG, etc.) containing text.
+- **Processing**: A progress indicator shows while the ML model analyzes the image.
+- **Result**: Upon completion, the user can download the extracted text file.
+- **Offline Capability**: Since it uses ML Kit's on-device processing, OCR works even without an internet connection.
+
 ## Splash Screen Design & Implementation
 
 The OmniConverter splash screen is a production-grade, Material Design-compliant interface that creates a professional first impression while adhering to modern app design standards.

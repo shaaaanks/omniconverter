@@ -112,6 +112,7 @@ public class ConversionWorker extends Worker {
         if ("MP4_TO_MP3".equalsIgnoreCase(type)) return new VideoToAudioConverter();
         if ("PDF_MERGE".equalsIgnoreCase(type)) return new com.omniconverter.app.converters.PDFMergerConverter();
         if ("DOCX_TO_PDF".equalsIgnoreCase(type)) return new com.omniconverter.app.converters.WordToPDFConverter();
+        if ("OCR".equalsIgnoreCase(type)) return new com.omniconverter.app.converters.OCRConverter();
         return null;
     }
 }
