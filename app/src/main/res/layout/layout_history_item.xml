@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:layout_margin="8dp"
+    android:background="#0B2B26"
+    android:elevation="4dp">
+
+    <TextView
+        android:id="@+id/history_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="#DAF1DE"
+        android:layout_marginBottom="4dp" />
+
+    <TextView
+        android:id="@+id/history_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:textColor="#8EB69B"
+        android:layout_marginBottom="4dp" />
+
+    <TextView
+        android:id="@+id/history_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:textColor="#DAF1DE"
+        android:layout_marginBottom="4dp" />
+
+    <TextView
+        android:id="@+id/history_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="11sp"
+        android:textColor="#999999"
+        android:layout_marginBottom="8dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end"
+        android:spacing="8dp">
+
+        <Button
+            android:id="@+id/history_open_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Download"
+            android:textSize="12sp"
+            android:padding="8dp"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/history_share_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Share"
+            android:textSize="12sp"
+            android:padding="8dp"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+</LinearLayout>

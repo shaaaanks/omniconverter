@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name" translatable="false">OmniConverter</string>
+    <string name="nav_converters" translatable="false">Converters</string>
+    <string name="nav_history">History</string>
+    <string name="history_type">Type: %1$s</string>
+    <string name="history_status">Status: %1$s</string>
+    <string name="history_date">Date: %1$s</string>
+    <string name="history_message">Message: %1$s</string>
+    <string name="history_na">N/A</string>
+    <string name="splash_tagline">All-in-One File Converter</string>
+    <string name="initializing">INITIALIZING</string>
+    <string name="app_logo">OmniConverter Logo</string>
+    <string name="conversion_icon">Conversion Icon</string>
+</resources>
