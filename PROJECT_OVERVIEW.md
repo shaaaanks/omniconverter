@@ -138,6 +138,7 @@ The PDF Merger module allows users to select multiple PDF files and merge them i
 ### 1. Technology Stack
 
 - **Libraries Used**: PDFBox Android (`com.tom-roush:pdfbox-android:2.0.27.0`)
+- **Key Class**: `PDFMergerUtility` - Provides robust merging capabilities
 - **UI Components**: RecyclerView for displaying selected files, Material Design buttons
 - **File Access**: Android Storage Access Framework for secure file selection
 - **API Level**: Compatible with Android API 24+
@@ -187,34 +188,34 @@ The PDF Merger preserves file order in the following way:
     - Remaining files maintain their relative order
 
 3.  **Merge Order**:
-    - During conversion, files are merged in the exact order they appear in the list
-    - PDFBox processes files sequentially and appends pages in list order
+    - The final list of URIs is passed to the converter in exact order
+    - PDFBox processes files sequentially and appends contents in list order
 
 ### 5. Conversion Logic (`PDFMergerConverter`)
 
-1.  **File Preparation**:
-    - Each selected PDF URI is converted to a local file via `FileUtils.copyUriToFile()`
-    - Files are temporarily stored in app cache with unique names
+The core logic handles the merging process robustly:
 
-2.  **PDFDocument Creation**:
-    - A new `PDDocument` is created using PDFBox
-    - This document will hold all merged pages
+1.  **Unified URI Passing**:
+    - All selected file URIs are bundled into a single String array (`file_uris`) in the `WorkManager` data.
+    - This ensures `ConversionWorker` receives the complete list without fragmentation.
 
-3.  **Sequential Page Addition**:
-    - For each PDF in the selected order:
-      - Load the PDF file as a `PDDocument`
-      - Iterate through all pages
-      - Append each page to the main document
-      - Close the temporary PDF document
+2.  **File Preparation**:
+    - Each URI from the `file_uris` array is resolved to a temporary local file in the app's cache.
+    - This is necessary because PDFBox requires direct file access.
 
-4.  **Output File Creation**:
-    - The merged document is saved to a new PDF file
-    - File is saved in app's `External/Documents/PDFs/` folder
-    - File name: `merged_<timestamp>.pdf`
+3.  **PDFMergerUtility**:
+    - The `com.tom_roush.pdfbox.multipdf.PDFMergerUtility` class is instantiated.
+    - Each temporary file is added as a source to the merger utility.
+    - This approach is more reliable than manually appending pages.
+
+4.  **Merging Execution**:
+    - The output file destination is set (e.g., `merged_<timestamp>.pdf`).
+    - `merger.mergeDocuments(null)` is called to execute the merge.
+    - This handles internal PDF structures (dictionaries, resources) correctly.
 
 5.  **Cleanup**:
-    - All temporary files are deleted
-    - Main merged document is closed properly
+    - All temporary input files are deleted to free up storage space.
+    - Start conversion button is re-enabled.
 
 ### 6. User Experience
 
@@ -245,11 +246,10 @@ The PDF Merger preserves file order in the following way:
 ### 8. Key Advantages
 
 - ✅ Preserves original page order and layout
-- ✅ Works with any number of PDF files
+- ✅ Uses centralized `file_uris` array for consistent data handling
+- ✅ Robust PDFBox implementation (`PDFMergerUtility`)
 - ✅ Allows removal of files before merging
-- ✅ Uses trusted PDFBox library
 - ✅ Shows clear file list with order numbers
-- ✅ Integrated with app's file management system
 - ✅ Files saved to standard `Downloads/OmniConverter/` folder
 
 ## Splash Screen Design & Implementation

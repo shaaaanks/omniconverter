@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -43,30 +44,36 @@ public class SplashActivity extends AppCompatActivity {
         Animation rotate = AnimationUtils.loadAnimation(this, R.anim.splash_rotate);
 
         // Apply animations with delays
-        new Handler(Looper.getMainLooper()).postDelayed(
-                () -> {
-                    logoBadge.startAnimation(logoEnter);
-                    glowEffect.startAnimation(logoEnter);
-                },
-                LOGO_DELAY
-        );
+        if (logoBadge != null && logoEnter != null && glowEffect != null) {
+            new Handler(Looper.getMainLooper()).postDelayed(
+                    () -> {
+                        logoBadge.startAnimation(logoEnter);
+                        glowEffect.startAnimation(logoEnter);
+                    },
+                    LOGO_DELAY
+            );
+        }
 
-        new Handler(Looper.getMainLooper()).postDelayed(
-                () -> conversionIcon.startAnimation(rotate),
-                LOGO_DELAY + 200
-        );
+        if (conversionIcon != null && rotate != null) {
+            new Handler(Looper.getMainLooper()).postDelayed(
+                    () -> conversionIcon.startAnimation(rotate),
+                    LOGO_DELAY + 200
+            );
+        }
 
-        new Handler(Looper.getMainLooper()).postDelayed(
-                () -> {
-                    appName.startAnimation(textEnter);
-                },
-                TEXT_DELAY
-        );
+        if (appName != null && textEnter != null) {
+            new Handler(Looper.getMainLooper()).postDelayed(
+                    () -> appName.startAnimation(textEnter),
+                    TEXT_DELAY
+            );
+        }
 
-        new Handler(Looper.getMainLooper()).postDelayed(
-                () -> tagline.startAnimation(textEnter),
-                TEXT_DELAY + 150
-        );
+        if (tagline != null && textEnter != null) {
+            new Handler(Looper.getMainLooper()).postDelayed(
+                    () -> tagline.startAnimation(textEnter),
+                    TEXT_DELAY + 150
+            );
+        }
 
         // Transition to MainActivity after splash duration
         new Handler(Looper.getMainLooper()).postDelayed(

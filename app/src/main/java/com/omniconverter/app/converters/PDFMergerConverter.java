@@ -6,10 +6,9 @@ import android.util.Log;
 
 import com.omniconverter.app.core.ConversionResult;
 import com.omniconverter.app.core.FileUtils;
+import com.tom_roush.pdfbox.multipdf.PDFMergerUtility;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -21,59 +20,76 @@ public class PDFMergerConverter implements Converter {
     public ConversionResult convert(Context context, Uri inputUri, Map<String, Object> params) throws Exception {
         ConversionResult result = new ConversionResult(inputUri);
 
-        // Extract multiple file URIs from params
         List<Uri> pdfUris = new ArrayList<>();
-        pdfUris.add(inputUri);
 
-        Object additionalFilesObj = params.get("additional_files");
-        if (additionalFilesObj instanceof List) {
-            @SuppressWarnings("unchecked")
-            List<String> additionalUris = (List<String>) additionalFilesObj;
-            for (String uriStr : additionalUris) {
-                pdfUris.add(Uri.parse(uriStr));
+        // Prioritize file_uris array if available
+        if (params.containsKey("file_uris")) {
+            String[] fileUrisArr = (String[]) params.get("file_uris");
+            if (fileUrisArr != null) {
+                for (String uriStr : fileUrisArr) {
+                    pdfUris.add(Uri.parse(uriStr));
+                }
             }
+        } else {
+            // Fallback to old behavior (inputUri + additional_files)
+            pdfUris.add(inputUri);
+            Object additionalFilesObj = params.get("additional_files");
+            if (additionalFilesObj instanceof List) {
+                @SuppressWarnings("unchecked")
+                List<String> additionalUris = (List<String>) additionalFilesObj;
+                for (String uriStr : additionalUris) {
+                    pdfUris.add(Uri.parse(uriStr));
+                }
+            } else if (additionalFilesObj instanceof String[]) {
+                String[] additionalUris = (String[]) additionalFilesObj;
+                for (String uriStr : additionalUris) {
+                    pdfUris.add(Uri.parse(uriStr));
+                }
+            }
+        }
+
+        if (pdfUris.isEmpty()) {
+            throw new IllegalArgumentException("No PDF files provided for merging");
         }
 
         Log.d(TAG, "Merging " + pdfUris.size() + " PDF files");
 
         // Copy all PDFs to cache
-        List<File> pdfFiles = new ArrayList<>();
-        for (int i = 0; i < pdfUris.size(); i++) {
-            File tmpFile = FileUtils.copyUriToFile(context, pdfUris.get(i), "pdf_" + i + ".pdf");
-            pdfFiles.add(tmpFile);
-        }
+        List<File> tempFiles = new ArrayList<>();
+        PDFMergerUtility merger = new PDFMergerUtility();
 
-        // Create output file
-        File outDir = context.getExternalFilesDir("PDFs");
-        if (outDir == null) {
-            outDir = new File(context.getCacheDir(), "PDFs");
-        }
-        if (!outDir.exists()) outDir.mkdirs();
+        try {
+            for (int i = 0; i < pdfUris.size(); i++) {
+                File tmpFile = FileUtils.copyUriToFile(context, pdfUris.get(i), "merge_input_" + i + "_" + System.currentTimeMillis() + ".pdf");
+                tempFiles.add(tmpFile);
+                merger.addSource(tmpFile);
+            }
 
-        File mergedPdf = new File(outDir, "merged_" + System.currentTimeMillis() + ".pdf");
+            // Create output file
+            File outDir = context.getExternalFilesDir("PDFs");
+            if (outDir == null) {
+                outDir = new File(context.getCacheDir(), "PDFs");
+            }
+            if (!outDir.exists()) outDir.mkdirs();
 
-        // Simple PDF merge by concatenating bytes
-        mergeSimplePDF(pdfFiles, mergedPdf);
+            File mergedPdf = new File(outDir, "merged_" + System.currentTimeMillis() + ".pdf");
+            merger.setDestinationFileName(mergedPdf.getAbsolutePath());
 
-        result.setOutputUri(Uri.fromFile(mergedPdf));
-        result.setStatus(ConversionResult.Status.SUCCESS);
-        Log.d(TAG, "Merge successful: " + mergedPdf.getAbsolutePath());
-        return result;
-    }
+            // Perform merge
+            merger.mergeDocuments(null);
 
-    /**
-     * Simple PDF merge by concatenating file contents
-     */
-    private void mergeSimplePDF(List<File> pdfFiles, File outputFile) throws Exception {
-        try (FileOutputStream fos = new FileOutputStream(outputFile)) {
-            for (File pdfFile : pdfFiles) {
-                try (FileInputStream fis = new FileInputStream(pdfFile)) {
-                    byte[] buffer = new byte[1024];
-                    int len;
-                    while ((len = fis.read(buffer)) > 0) {
-                        fos.write(buffer, 0, len);
-                    }
-                }
+            result.setOutputUri(Uri.fromFile(mergedPdf));
+            result.setStatus(ConversionResult.Status.SUCCESS);
+            Log.d(TAG, "Merge successful: " + mergedPdf.getAbsolutePath());
+            return result;
+
+        } catch (Exception e) {
+            Log.e(TAG, "Merge failed", e);
+            throw e;
+        } finally {
+            // Clean up temporary input files
+            for (File f : tempFiles) {
+                if (f.exists()) f.delete();
             }
         }
     }

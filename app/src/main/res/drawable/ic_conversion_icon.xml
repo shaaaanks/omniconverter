@@ -27,7 +27,7 @@
 
     <!-- Center Arrow (Conversion Arrow) -->
     <path
-        android:fillColor="none"
+        android:fillColor="@android:color/transparent"
         android:pathData="M 35,40 L 45,40"
         android:strokeWidth="3"
         android:strokeColor="#8EB69B"

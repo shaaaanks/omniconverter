@@ -37,8 +37,17 @@ public class ConversionWorker extends Worker {
         String type = getInputData().getString(KEY_TYPE);
         String format = getInputData().getString(KEY_FORMAT);
         String[] additionalFiles = getInputData().getStringArray("additional_files");
+        String[] fileUris = getInputData().getStringArray("file_uris"); // New input
 
-        if (uriStr == null || type == null) return Result.failure();
+        if (uriStr == null || type == null) {
+            // Check if file_uris is provided instead
+            if (fileUris != null && fileUris.length > 0 && type != null) {
+                uriStr = fileUris[0]; // Use first URI as main if input_uri is missing
+            } else {
+                return Result.failure();
+            }
+        }
+
         Uri uri = Uri.parse(uriStr);
         Converter converter = selectConverter(type);
         if (converter == null) return Result.failure();
@@ -49,6 +58,9 @@ public class ConversionWorker extends Worker {
         }
         if (additionalFiles != null) {
             params.put("additional_files", additionalFiles);
+        }
+        if (fileUris != null) {
+            params.put("file_uris", fileUris); // Pass to converter
         }
 
         String fileName = getFileNameFromUri(uri);

@@ -273,16 +273,26 @@ public class ConverterDetailFragment extends Fragment {
 
         try {
             Data.Builder dataBuilder = new Data.Builder()
-                .putString(ConversionWorker.KEY_URI, selectedUri.toString())
                 .putString(ConversionWorker.KEY_TYPE, converterType)
                 .putString(ConversionWorker.KEY_FORMAT, selectedFormat);
 
-            if ("PDF_MERGE".equalsIgnoreCase(converterType) && selectedUris.size() > 1) {
-                List<String> additionalUris = selectedUris.subList(1, selectedUris.size()).stream()
-                    .map(Uri::toString)
-                    .collect(Collectors.toList());
-                dataBuilder.putStringArray("additional_files", additionalUris.toArray(new String[0]));
+            if ("PDF_MERGE".equalsIgnoreCase(converterType)) {
+                if (selectedUris != null && !selectedUris.isEmpty()) {
+                    String[] allUris = selectedUris.stream().map(Uri::toString).toArray(String[]::new);
+                    dataBuilder.putStringArray("file_uris", allUris);
+                    // Also set KEY_URI to the first one just in case something expects it, but worker should prioritize file_uris for merge
+                    dataBuilder.putString(ConversionWorker.KEY_URI, selectedUris.get(0).toString());
+                } else if (selectedUri != null) {
+                     // Fallback if selectedUris is empty but selectedUri is set (single file case, though merge implies multiple)
+                     dataBuilder.putStringArray("file_uris", new String[]{selectedUri.toString()});
+                     dataBuilder.putString(ConversionWorker.KEY_URI, selectedUri.toString());
+                }
+            } else {
+                dataBuilder.putString(ConversionWorker.KEY_URI, selectedUri.toString());
             }
+
+            // Remove old split logic
+            // if ("PDF_MERGE".equalsIgnoreCase(converterType) && selectedUris.size() > 1) { ... }
 
             Data inputData = dataBuilder.build();
 
